@@ -1,0 +1,9 @@
+name: project2
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+      - mlflow>=1.0
+      - albumentations

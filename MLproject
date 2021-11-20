@@ -1,0 +1,9 @@
+name: pipeline
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      something: {type: str}
+    command: "python main.py --something {something}"

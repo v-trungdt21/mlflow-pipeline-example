@@ -1,0 +1,20 @@
+pipeline:
+  fairmot:
+      step_folder: /home/termanteus/workspace/mlops/playground/pipeline/prj1
+      entrypoint: main
+      params:  
+        p11: 11
+        p12: 112
+        p13: 11
+      use_cache: False
+      git_commit: null
+  retinaface:
+      step_folder: /home/termanteus/workspace/mlops/playground/pipeline/proj2
+      entrypoint: main
+      params:  
+        p21: 22 
+        p22: 434
+      use_cache: False
+      git_commit: null
+    
+

@@ -1,0 +1,10 @@
+name: project2
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      p21: {type: float, default: 0.5}
+      p22: {type: float, default: 0.1}
+    command: "python main.py {p21} {p22}"
