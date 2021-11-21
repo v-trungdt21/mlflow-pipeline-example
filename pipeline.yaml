@@ -3,18 +3,18 @@ pipeline:
       step_folder: /home/termanteus/workspace/mlops/playground/pipeline/prj1
       entrypoint: main
       params:  
-        p11: 11
+        p11: 11123123
         p12: 112
         p13: 11
-      use_cache: False
-      git_commit: null
+      use_cache: True
+      git_commit: e9a4fca05fd46ae78a9ca413c4f17c3836e512e5
   retinaface:
       step_folder: /home/termanteus/workspace/mlops/playground/pipeline/proj2
       entrypoint: main
       params:  
         p21: 22 
         p22: 434
-      use_cache: False
-      git_commit: null
+      use_cache: True
+      git_commit: e9a4fca05fd46ae78a9ca413c4f17c3836e512e5
     
 

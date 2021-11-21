@@ -38,7 +38,7 @@ def _already_ran(
             continue
         cur_run_source_name = cur_run_source_fullname.split("/")[-1]
         if (
-            cur_run_source_name != step_folder.split("/")[-1]
+            step_folder.split("/")[-1] not in cur_run_source_name
             or cur_run_entry_point_name != entry_point_name
         ):
             continue
@@ -71,6 +71,7 @@ def _already_ran(
             continue
 
         previous_version = tags.get(mlflow_tags.MLFLOW_GIT_COMMIT, None)
+        print(previous_version)
         if git_commit != previous_version:
             eprint(
                 (
@@ -93,19 +94,26 @@ def _get_or_run(step_folder, entrypoint, parameters, git_commit, use_cache=True)
         raise Exception(
             f"Please define git commit hash if want to use cache in {step_folder}.{entrypoint}"
         )
-    existing_run = _already_ran(step_folder, entrypoint, parameters, git_commit)
-    if use_cache and existing_run:
-        print(
-            "Found existing run for %s.entrypoint=%s and parameters=%s"
-            % (step_folder, entrypoint, parameters)
-        )
-        return existing_run
+    if use_cache:
+        existing_run = _already_ran(step_folder, entrypoint, parameters, git_commit)
+        if existing_run:
+            print(
+                "Found existing run for %s.entrypoint=%s and parameters=%s"
+                % (step_folder, entrypoint, parameters)
+            )
+            return existing_run
     print(
         "Launching new run for %s.entrypoint=%s and parameters=%s"
         % (step_folder, entrypoint, parameters)
     )
     submitted_run = mlflow.run(step_folder, entrypoint, parameters=parameters)
-    return mlflow.tracking.MlflowClient().get_run(submitted_run.run_id)
+    client = mlflow.tracking.MlflowClient()
+    client.set_tag(
+        submitted_run.run_id,
+        "mlflow.source.git.commit",
+        git_commit if git_commit else "",
+    )
+    return client.get_run(submitted_run.run_id)
 
 
 @click.command()
@@ -133,6 +141,7 @@ def workflow(something):
                 obj["git_commit"] if "git_commit" in obj else None,
                 obj["use_cache"],
             )
+
             pipeline_runs.append(r)
         with open(
             "/home/termanteus/workspace/mlops/playground/pipeline/output/prj2.json", "r"
